@@ -1,5 +1,4 @@
 # 수들의 합 5
-
 import sys
 
 N = int(sys.stdin.readline())
