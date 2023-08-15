@@ -12,15 +12,15 @@ def N_M(depth, N, M):
     for i in range(1, N + 1):
         if not visited[i]:
             visited[i] = True
-            #print(visited, 'A')
+            print(visited, 'A')
             answer.append(i)
-            #print(answer,'AA')
+            print(answer,'AA')
 
             N_M(depth + 1, N, M)    # 재귀
             visited[i] = False
-            #print(visited, 'B')
+            print(visited, 'B')
             answer.pop()
-            #print(answer,'BB')
+            print(answer,'BB')
 
 
 N, M = map(int, input().split())
