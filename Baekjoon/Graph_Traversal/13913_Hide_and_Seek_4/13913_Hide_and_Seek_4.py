@@ -1,4 +1,3 @@
-# 숨바꼭질 3
 import sys
 from collections import deque
 sys.stdin = open('input.txt')
@@ -11,19 +10,20 @@ def BFS(n):
         if x == K:
             print(visited[x])
             break
-        dx = [x, -1, 1]
+        dx = [-1, 1, x]
         for i in range(3):
             nx = x + dx[i]
-            if 0 <= nx <= (10 ** 5) and visited[nx] == -1:
-                if i == 0:
-                    visited[nx] = visited[x]
-                else:
-                    visited[nx] = visited[x] + 1
+            if 0 <= nx < (10 ** 5 + 2) and visited[nx] == -1:
+                visited[nx] = visited[x] + 1
                 queue.append(nx)
 
+def check_root(k):
+    ds = [-1, 1, -s]
+    pass
 
 N, K = map(int, sys.stdin.readline().split())
-visited = [-1] * (10 ** 5)
+visited = [-1] * (10 ** 5 + 1)
 visited[N] = 0
 BFS(N)
 print(visited)
+check_root(K)
