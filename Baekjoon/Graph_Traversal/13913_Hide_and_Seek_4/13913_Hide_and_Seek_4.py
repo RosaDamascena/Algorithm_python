@@ -9,21 +9,27 @@ def BFS(n):
         x = queue.popleft()
         if x == K:
             print(visited[x])
+            check_route(x)
             break
         dx = [-1, 1, x]
         for i in range(3):
             nx = x + dx[i]
-            if 0 <= nx < (10 ** 5 + 2) and visited[nx] == -1:
+            if 0 <= nx <= (10 ** 5) and not visited[nx]:
                 visited[nx] = visited[x] + 1
+                route[nx] = x
                 queue.append(nx)
 
-def check_root(k):
-    ds = [-1, 1, -s]
-    pass
+def check_route(x):
+    answer = []
+    n = visited[x]
+    p = x
+    for i in range(n + 1):
+        answer.append(p)
+        p = route[p]
+    print(*answer[::-1])
+
 
 N, K = map(int, sys.stdin.readline().split())
-visited = [-1] * (10 ** 5 + 1)
-visited[N] = 0
+visited = [0] * (10 ** 5 + 1)
+route = [0] * (10 ** 5 + 1)
 BFS(N)
-print(visited)
-check_root(K)
