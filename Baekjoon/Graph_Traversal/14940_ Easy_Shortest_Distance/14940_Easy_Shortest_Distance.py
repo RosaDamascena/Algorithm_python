@@ -1,12 +1,10 @@
 # 14940 - 쉬운 최단거리
 import sys
-
 sys.stdin = open('input.txt')
 from collections import deque
 
 
 def BFS():
-    global cnt
     while queue:
         x, y = queue.popleft()
         for i in range(4):
