@@ -3,13 +3,9 @@ import sys
 sys.stdin = open('input.txt')
 
 N, M = map(int, sys.stdin.readline().split())
-Board = [list(map(int, sys.stdin.readline().split())) for _ in range(N)]
-DS = [list(map(int, sys.stdin.readline().split())) for _ in range(M)]
-Cloud = []
-Cloud.append((N-1, 0))
-Cloud.append((N-1, 1))
-Cloud.append((N-2, 0))
-Cloud.append((N-2, 1))
+Board = [list(map(int, sys.stdin.readline().split())) for _ in range(N)]    # 물의 양이 적힌 board
+DS = [list(map(int, sys.stdin.readline().split())) for _ in range(M)]   # d = 방향, s = 횟수
+Cloud = [(N-1, 0), (N-1, 1), (N-2, 0), (N-2, 1)]
 
 # 8개 방향 dict (r, c) 행 열
 direction = {
@@ -23,20 +19,42 @@ direction = {
     8: (1, -1)
 }
 
-for i in range(M):
+# 대각선 (sr, sc)
+diagonal = [(-1, -1), (1, -1), (-1, 1), (1, 1)]
+
+for d, s in DS:
     # 1. d 방향 s만큼 이동
-    d, s = DS[i]
-    for j in Cloud:
-        x, y = j
-        nx, ny = x + direction[d][0], y + direction[d][1]
-    # 2. 구름이 있는 칸 물 양 1 증가
+    move_cloud = []
+    for x, y in Cloud:
+        nx, ny = (x + direction[d][0] * s) % N, (y + direction[d][1] * s) % N
+        move_cloud.append((nx, ny))
+        # 2. 구름이 있는 칸 물 양 1 증가
+        Board[nx][ny] += 1
+    Cloud = move_cloud
 
     # 3. 물 복사 버그 시전
-    # - 대각선 칸 물 여부 확인 cnt 증가
-    # - r,c 에 있는 바구니의 물 cnt만큼 증가
+    for r, c in Cloud:
+        cnt = 0  # 물 복사 임시 저장
+        for sr, sc in diagonal:
+            dr, dc = r + sr, c + sc
+            if 0 <= dr < N and 0 <= dc < N:
+                if Board[dr][dc] > 0:
+                    cnt += 1
+        Board[r][c] += cnt
 
     # 4. 전체 탐색 - 물의 양이 2 이상인 모든 칸에 구름 생성
-    # - 물의 양 2 줄어든다.
-    # - 원래 구름이 있던 칸이 아니여야 함( 구름 배열 만들기 )
+    new_cloud = []
+    for i in range(N):
+        for j in range(N):
+            if (i, j) not in Cloud and Board[i][j] >= 2:
+                Board[i][j] -= 2
+                new_cloud.append((i, j))
+    Cloud = new_cloud
 
-    # 물의 양의 합 water 구하기
+# result = 물의 양의 합 water 구하기
+result = 0
+for i in range(N):
+    for j in range(N):
+        result += Board[i][j]
+
+print(result)
